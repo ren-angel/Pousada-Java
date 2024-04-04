@@ -5,9 +5,6 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     public TelaPrincipal() {
         initComponents();
-        
-        // Essa linha de código define o texto de um JLabel chamado labelManual como uma string de várias linhas usando formatação HTML. O texto é envolvido por tags <html> e <body> para permitir a renderização de HTML dentro do componente JLabel. Isto permite formatação como quebra de linhas com maior facilidade
-        labelManual.setText("<html><body>Para utilizar o programa e manejar os usuários, vá no canto superior esquerdo e clique em \"Cadastro\", então em \"Usuarios\", ou pressione CTRL+N.<br> Clique em \"Ajuda\" e então em \"Sobre\", ou pressione CTRL+S para ver informações sobre o aplicativo.<br> Para sair do programa, clique em \"Opções\" e então em \"Sair\" ou pressione ESC.</body></html>");
     }
 
     @SuppressWarnings("unchecked")
@@ -60,6 +57,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuReserva.setText("Reserva");
 
         visualizarReserva.setText("Visualizar");
+        visualizarReserva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                visualizarReservaActionPerformed(evt);
+            }
+        });
         menuReserva.add(visualizarReserva);
 
         fazerReserva.setText("Reservar");
@@ -134,16 +136,30 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariosActionPerformed
 
-        TelaUsuarios usuario = new TelaUsuarios(); // Criando uma instância da classe TelaUsuarios
+        TelaContas conta = new TelaContas(); // Criando uma instância da classe TelaContas
         
-        usuario.setVisible(true); // Torna visível o frame TelaUsuarios
+        conta.setVisible(true); // Torna visível o frame TelaContas
         
-        desktop.add(usuario); // Adiciona o frame TelaUsuarios ao painel da área de trabalho
+        desktop.add(conta); // Adiciona o frame TelaContas ao painel da área de trabalho
     }//GEN-LAST:event_usuariosActionPerformed
 
     private void fazerReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fazerReservaActionPerformed
-        // TODO add your handling code here:
+
+        TelaReservar reservar = new TelaReservar(); // Criando uma instância da classe TelaReservar
+        
+        reservar.setVisible(true); // Torna visível o frame TelaReservar
+        
+        desktop.add(reservar); // Adiciona o frame TelaReservar ao painel da área de trabalho
     }//GEN-LAST:event_fazerReservaActionPerformed
+
+    private void visualizarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarReservaActionPerformed
+               
+        TelaVisualizarReserva visualizar = new TelaVisualizarReserva(); // Criando uma instância da classe TelaVisualizarReserva
+        
+        visualizar.setVisible(true); // Torna visível o frame TelaVisualizarReserva
+        
+        desktop.add(visualizar); // Adiciona o frame TelaVisualizarReserva ao painel da área de trabalho
+    }//GEN-LAST:event_visualizarReservaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
