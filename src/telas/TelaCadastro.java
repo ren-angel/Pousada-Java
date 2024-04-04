@@ -10,7 +10,6 @@ public class TelaCadastro extends javax.swing.JFrame {
     Connection conexao = null;
     PreparedStatement pst = null; // PreparedStatement é uma declaração SQL pré-compilada que permite queries parametrizadas, melhorando o desempenho e a segurança ao evitar ataques de intrusão de SQL
     ResultSet rs = null; // ResultSet é um objeto usado para recuperar e manipular dados de um banco de dados após a execução de uma query. Ele fornece métodos para percorrer as linhas de dados, acessar valores de colunas individuais e executar operações como atualizações e exclusões nos dados
-    long ID = 0;
     
     public TelaCadastro() {
         initComponents();
@@ -22,7 +21,7 @@ public class TelaCadastro extends javax.swing.JFrame {
     private void Cadastrar() {
         
         // Declarações SQL para inserir as informações no banco de dados
-        String sql = "INSERT INTO tbl_login (nome,senha) VALUES (?,?)";
+        String sql = "INSERT INTO tbl_login (nome,senha,email,cpf,ddd,celular,endereco,estado,cidade) VALUES (?,?,?,?,?,?,?,?,?)";
         
         // Validações de cada entrada
         if(inputNome.getText().length() < 1 || inputNome.getText().length() > 100) {
@@ -30,7 +29,34 @@ public class TelaCadastro extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Nome deve ter dentre 1 a 100 caracteres");
         } else if(inputSenha.getText().length() < 1 || inputSenha.getText().length() > 100) {
             
-            JOptionPane.showMessageDialog(null, "E-mail deve ter dentre 1 a 100 caracteres");
+            JOptionPane.showMessageDialog(null, "Senha deve ter dentre 1 a 100 caracteres");
+        } else if(inputEmail.getText().length() < 1 || inputEmail.getText().length() > 50) {
+            
+            JOptionPane.showMessageDialog(null, "E-mail deve ter dentre 1 a 50 caracteres");
+        } else if(!Validacoes.validarCPF(inputCPF.getText())) {
+
+            JOptionPane.showMessageDialog(null, "CPF inválido");
+        } else if(!inputDDD.getText().matches("[0-9]+")) {
+        
+            JOptionPane.showMessageDialog(null, "DDD precisa ser um número");
+        } else if(inputDDD.getText().length() != 2) {
+
+            JOptionPane.showMessageDialog(null, "DDD precisa ter 2 dígitos");
+        } else if(!inputCelular.getText().matches("[0-9]+")) {
+
+            JOptionPane.showMessageDialog(null, "Celular precisa ser um número");
+        } else if(inputCelular.getText().length() != 9) {
+
+            JOptionPane.showMessageDialog(null, "Celular precisa ter 9 dígitos");
+        } else if(inputEndereco.getText().length() < 1 || inputEndereco.getText().length() > 200) {
+            
+            JOptionPane.showMessageDialog(null, "Endereço deve ter dentre 1 a 200 caracteres");
+        } else if(inputEstado.getText().length() < 1 || inputEstado.getText().length() > 100) {
+            
+            JOptionPane.showMessageDialog(null, "Estado deve ter dentre 1 a 100 caracteres");
+        } else if(inputCidade.getText().length() < 1 || inputCidade.getText().length() > 150) {
+            
+            JOptionPane.showMessageDialog(null, "Cidade deve ter dentre 1 a 150 caracteres");
         } else {
         
             try {
@@ -40,6 +66,13 @@ public class TelaCadastro extends javax.swing.JFrame {
                 // Define os parâmetros para a primeira declaração
                 pst.setString(1, inputNome.getText());
                 pst.setString(2, inputSenha.getText());
+                pst.setString(3, inputEmail.getText());
+                pst.setString(4, inputCPF.getText());
+                pst.setString(5, inputDDD.getText());
+                pst.setString(6, inputCelular.getText());
+                pst.setString(7, inputEndereco.getText());
+                pst.setString(8, inputEstado.getText());
+                pst.setString(9, inputCidade.getText());
 
                 // Executa ambas as declarações SQL
                 int  adicionado = pst.executeUpdate();
@@ -49,15 +82,6 @@ public class TelaCadastro extends javax.swing.JFrame {
                     
                     JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso");
                     
-                    // Pega o ID gerado ao criar o novo usuário
-                    try (ResultSet usuarioID = pst.getGeneratedKeys()) {
-                        
-                        ID = usuarioID.getLong(1);
-                    } catch (Exception e) {
-                        
-                        JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
-                    }
-                    
                     this.dispose();
                 }
             } catch(Exception e) {
@@ -65,11 +89,6 @@ public class TelaCadastro extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
             }
         }
-    }
-    
-    public long getUserID() {
-        
-        return ID;
     }
     
 
@@ -83,9 +102,22 @@ public class TelaCadastro extends javax.swing.JFrame {
         inputSenha = new javax.swing.JPasswordField();
         btnCadastrar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        inputEmail = new javax.swing.JTextField();
+        inputCPF = new javax.swing.JTextField();
+        inputDDD = new javax.swing.JTextField();
+        inputCelular = new javax.swing.JTextField();
+        inputEndereco = new javax.swing.JTextField();
+        inputEstado = new javax.swing.JTextField();
+        inputCidade = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(446, 379));
         setResizable(false);
 
         jLabel1.setText("Nome");
@@ -108,31 +140,71 @@ public class TelaCadastro extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel3.setText("Cadastre seu nome de usuário e senha");
 
+        jLabel4.setText("Email");
+
+        jLabel5.setText("CPF");
+
+        jLabel6.setText("DDD");
+
+        jLabel7.setText("Celular");
+
+        jLabel8.setText("Endereço");
+
+        jLabel9.setText("Cidade");
+
+        jLabel10.setText("Estado");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(inputSenha))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(185, 185, 185)
-                        .addComponent(btnCadastrar)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 68, Short.MAX_VALUE)
                 .addComponent(jLabel3)
                 .addGap(58, 58, 58))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(96, 96, 96)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputEmail))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputCPF))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputDDD, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputCelular))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputSenha))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(inputNome, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel8)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(inputEstado)
+                            .addComponent(inputEndereco)
+                            .addComponent(inputCidade))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnCadastrar)
+                .addGap(181, 181, 181))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -147,9 +219,35 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(inputSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(inputEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(inputCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(inputDDD, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(inputCelular, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(inputEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(inputEstado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(inputCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(btnCadastrar)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         pack();
@@ -197,10 +295,24 @@ public class TelaCadastro extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
+    private javax.swing.JTextField inputCPF;
+    private javax.swing.JTextField inputCelular;
+    private javax.swing.JTextField inputCidade;
+    private javax.swing.JTextField inputDDD;
+    private javax.swing.JTextField inputEmail;
+    private javax.swing.JTextField inputEndereco;
+    private javax.swing.JTextField inputEstado;
     private javax.swing.JTextField inputNome;
     private javax.swing.JPasswordField inputSenha;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     // End of variables declaration//GEN-END:variables
 }

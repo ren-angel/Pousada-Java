@@ -17,7 +17,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         menuConta = new javax.swing.JMenu();
         usuarios = new javax.swing.JMenuItem();
         menuReserva = new javax.swing.JMenu();
-        visualizarReserva = new javax.swing.JMenuItem();
+        pagamentoReserva = new javax.swing.JMenuItem();
         fazerReserva = new javax.swing.JMenuItem();
         menuAjuda = new javax.swing.JMenu();
         ajudaSobre = new javax.swing.JMenuItem();
@@ -56,14 +56,16 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
         menuReserva.setText("Reserva");
 
-        visualizarReserva.setText("Visualizar");
-        visualizarReserva.addActionListener(new java.awt.event.ActionListener() {
+        pagamentoReserva.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        pagamentoReserva.setText("Pagamento");
+        pagamentoReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                visualizarReservaActionPerformed(evt);
+                pagamentoReservaActionPerformed(evt);
             }
         });
-        menuReserva.add(visualizarReserva);
+        menuReserva.add(pagamentoReserva);
 
+        fazerReserva.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         fazerReserva.setText("Reservar");
         fazerReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -152,14 +154,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
         desktop.add(reservar); // Adiciona o frame TelaReservar ao painel da área de trabalho
     }//GEN-LAST:event_fazerReservaActionPerformed
 
-    private void visualizarReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_visualizarReservaActionPerformed
+    private void pagamentoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagamentoReservaActionPerformed
                
-        TelaVisualizarReserva visualizar = new TelaVisualizarReserva(); // Criando uma instância da classe TelaVisualizarReserva
+        TelaPagamento visualizar = new TelaPagamento(); // Criando uma instância da classe TelaVisualizarReserva
         
         visualizar.setVisible(true); // Torna visível o frame TelaVisualizarReserva
         
         desktop.add(visualizar); // Adiciona o frame TelaVisualizarReserva ao painel da área de trabalho
-    }//GEN-LAST:event_visualizarReservaActionPerformed
+    }//GEN-LAST:event_pagamentoReservaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -202,7 +204,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuOpcoes;
     private javax.swing.JMenu menuReserva;
     private javax.swing.JMenuItem opcoesSair;
+    private javax.swing.JMenuItem pagamentoReserva;
     private javax.swing.JMenuItem usuarios;
-    private javax.swing.JMenuItem visualizarReserva;
     // End of variables declaration//GEN-END:variables
 }

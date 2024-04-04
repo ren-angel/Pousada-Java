@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3307
--- Tempo de geração: 04-Abr-2024 às 14:08
+-- Tempo de geração: 04-Abr-2024 às 16:55
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -37,18 +37,16 @@ CREATE TABLE `tbl_login` (
   `celular` char(9) NOT NULL,
   `endereco` varchar(200) NOT NULL,
   `estado` varchar(100) NOT NULL,
-  `cidade` varchar(150) NOT NULL,
-  `dataEntrada` date NOT NULL,
-  `dataSaida` date NOT NULL,
-  `quartos` int(11) NOT NULL
+  `cidade` varchar(150) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Extraindo dados da tabela `tbl_login`
 --
 
-INSERT INTO `tbl_login` (`id`, `nome`, `senha`, `email`, `cpf`, `ddd`, `celular`, `endereco`, `estado`, `cidade`, `dataEntrada`, `dataSaida`, `quartos`) VALUES
-(1, 'abc', 'abc', 'abc@gmail.com', '11111111111', '11', '111111111', 'abc district', 'abc land', 'abc city', '2024-03-25', '2024-04-01', 2);
+INSERT INTO `tbl_login` (`id`, `nome`, `senha`, `email`, `cpf`, `ddd`, `celular`, `endereco`, `estado`, `cidade`) VALUES
+(1, 'abc', 'abc', 'abc@gmail.com', '11111111111', '11', '111111111', 'abc district', 'abc land', 'abc city'),
+(2, '123', '123', '123@gmail.com', '50022632832', '11', '111111111', 'aaa', 'bbb', 'ccc');
 
 -- --------------------------------------------------------
 
@@ -61,8 +59,9 @@ CREATE TABLE `tbl_quartos` (
   `nome` varchar(50) NOT NULL,
   `descricao` varchar(600) NOT NULL,
   `preco` decimal(6,2) NOT NULL,
-  `diaSemana` enum('Segunda','Terça','Quarta','Quinta','Sexta','Sábado','Domingo') NOT NULL,
-  `periodo` enum('Manhã','Tarde','Noite','Madrugada') NOT NULL,
+  `dataEntrada` date NOT NULL,
+  `dataSaida` date NOT NULL,
+  `idUsuario` int(11) DEFAULT NULL,
   `disponibilidade` tinyint(1) NOT NULL,
   `pago` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -91,7 +90,7 @@ ALTER TABLE `tbl_quartos`
 -- AUTO_INCREMENT de tabela `tbl_login`
 --
 ALTER TABLE `tbl_login`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `tbl_quartos`

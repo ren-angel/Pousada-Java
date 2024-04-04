@@ -9,7 +9,8 @@ public class telaLogin extends javax.swing.JFrame {
     Connection conexao = null;
     PreparedStatement pst = null; // PreparedStatement é uma declaração SQL pré-compilada que permite queries parametrizadas, melhorando o desempenho e a segurança ao evitar ataques de intrusão de SQL
     ResultSet rs = null; // ResultSet é um objeto usado para recuperar e manipular dados de um banco de dados após a execução de uma query. Ele fornece métodos para percorrer as linhas de dados, acessar valores de colunas individuais e executar operações como atualizações e exclusões nos dados
-
+    int ID = 0;
+    
     public telaLogin() {
         initComponents();
         
@@ -19,7 +20,7 @@ public class telaLogin extends javax.swing.JFrame {
     // Método para fazer login
     public void Logar() {
         
-        String sql = "SELECT * FROM tbl_login WHERE nome=? AND senha=?"; // SQL query para recuperar o usuário com base no e-mail e na senha
+        String sql = "SELECT id FROM tbl_login WHERE nome=? AND senha=?"; // SQL query para recuperar o usuário com base no e-mail e na senha
         
         try {
             
@@ -33,6 +34,8 @@ public class telaLogin extends javax.swing.JFrame {
             
             // Verifica se há um usuário correspondente
             if (rs.next()) {
+                
+                ID = rs.getInt("id"); // Pega o ID do usuário ao logar
                 
                 TelaPrincipal principal = new TelaPrincipal(); // Criando uma instância da classe TelaPrincipal
                 
@@ -63,10 +66,17 @@ public class telaLogin extends javax.swing.JFrame {
         }
     }
     
+    // Método para abrir a janela de cadastro de um novo usuário
     private void Cadastrar() {
         
         TelaCadastro cadastrar = new TelaCadastro(); // Criando uma instância da classe TelaCadastro
         cadastrar.setVisible(true); // Torna visível o frame TelaCadastro        
+    }
+    
+    // Exporta o ID do usuário para ser usado como token para mostrar apenas as informações do usuário atual
+    public int getUserID() {
+        
+        return ID;
     }
 
     @SuppressWarnings("unchecked")

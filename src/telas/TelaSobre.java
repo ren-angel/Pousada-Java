@@ -6,7 +6,7 @@ public class TelaSobre extends javax.swing.JFrame {
         initComponents();
         
         // Essa linha de código define o texto de um JLabel chamado labelDescricao como uma string de várias linhas usando formatação HTML. O texto é envolvido por tags <html> e <body> para permitir a renderização de HTML dentro do componente JLabel. Isto permite formatação como quebra de linhas com maior facilidade
-        labelDescricao.setText("<html><body>Programa para registrar, visualizar, editar, e excluir as informações de contato de um usuário.</body></html>");
+        labelDescricao.setText("<html><body>Nossa Pousada 5 estrelas trará a melhor experiência juntando conforto e luxo aos nossos clientes.<br>Para fazer uma reserva, clique em 'Reserva' no menu e então em 'Reservar', a tela com todos os nossos quartos aparecerá a você para serem reservados.<br> Para visualizar sua reserva e efetuar o pagamento, clique em 'Reserva' no meu e então em 'Pagamento', a tela de visualização e pagamento da reserva aparecerá a você.</body></html>");
     }
 
     @SuppressWarnings("unchecked")
@@ -15,7 +15,6 @@ public class TelaSobre extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         labelDescricao = new javax.swing.JLabel();
 
@@ -24,18 +23,14 @@ public class TelaSobre extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jLabel1.setText("SISTEMA DE CRUD");
+        jLabel1.setText("Pousada Drivago");
 
-        jLabel2.setText("Criado e desenvolvido por Daniel Medrado");
-
-        jLabel4.setText("Dia de criação: 21/03/24");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Copyright © Daniel Medrado & Lucas Vasconcelos");
 
         jLabel5.setText("Versão: 1.0");
 
         labelDescricao.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        labelDescricao.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        labelDescricao.setText("Programa para registrar, visualizar, editar, e excluir as informações de contato de um usuário.");
-        labelDescricao.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -43,34 +38,29 @@ public class TelaSobre extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(jLabel4)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 57, Short.MAX_VALUE)
-                        .addComponent(labelDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(288, 288, 288)
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(88, 88, 88))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(labelDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 710, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(38, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(39, 39, 39)
                 .addComponent(jLabel1)
-                .addGap(29, 29, 29)
-                .addComponent(labelDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
-                .addGap(72, 72, 72)
-                .addComponent(jLabel4)
-                .addGap(31, 31, 31)
+                .addGap(38, 38, 38)
+                .addComponent(labelDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -114,7 +104,6 @@ public class TelaSobre extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel labelDescricao;
     // End of variables declaration//GEN-END:variables
