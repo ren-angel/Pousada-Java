@@ -17,11 +17,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         desktop = new javax.swing.JDesktopPane();
         menu = new javax.swing.JMenuBar();
-        menuCadastro = new javax.swing.JMenu();
+        menuConta = new javax.swing.JMenu();
         usuarios = new javax.swing.JMenuItem();
-        jMenu1 = new javax.swing.JMenu();
-        visualizarReservas = new javax.swing.JMenuItem();
-        gerenciarReservas = new javax.swing.JMenuItem();
+        menuReserva = new javax.swing.JMenu();
+        visualizarReserva = new javax.swing.JMenuItem();
+        fazerReserva = new javax.swing.JMenuItem();
         menuAjuda = new javax.swing.JMenu();
         ajudaSobre = new javax.swing.JMenuItem();
         menuOpcoes = new javax.swing.JMenu();
@@ -44,33 +44,33 @@ public class TelaPrincipal extends javax.swing.JFrame {
             .addGap(0, 544, Short.MAX_VALUE)
         );
 
-        menuCadastro.setText("Cadastro");
+        menuConta.setText("Conta");
 
         usuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        usuarios.setText("Usuários");
+        usuarios.setText("Gerenciar");
         usuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usuariosActionPerformed(evt);
             }
         });
-        menuCadastro.add(usuarios);
+        menuConta.add(usuarios);
 
-        menu.add(menuCadastro);
+        menu.add(menuConta);
 
-        jMenu1.setText("Reservas");
+        menuReserva.setText("Reserva");
 
-        visualizarReservas.setText("Visualizar");
-        jMenu1.add(visualizarReservas);
+        visualizarReserva.setText("Visualizar");
+        menuReserva.add(visualizarReserva);
 
-        gerenciarReservas.setText("Gerenciar");
-        gerenciarReservas.addActionListener(new java.awt.event.ActionListener() {
+        fazerReserva.setText("Reservar");
+        fazerReserva.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gerenciarReservasActionPerformed(evt);
+                fazerReservaActionPerformed(evt);
             }
         });
-        jMenu1.add(gerenciarReservas);
+        menuReserva.add(fazerReserva);
 
-        menu.add(jMenu1);
+        menu.add(menuReserva);
 
         menuAjuda.setText("Ajuda");
 
@@ -141,9 +141,9 @@ public class TelaPrincipal extends javax.swing.JFrame {
         desktop.add(usuario); // Adiciona o frame TelaUsuarios ao painel da área de trabalho
     }//GEN-LAST:event_usuariosActionPerformed
 
-    private void gerenciarReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_gerenciarReservasActionPerformed
+    private void fazerReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fazerReservaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_gerenciarReservasActionPerformed
+    }//GEN-LAST:event_fazerReservaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -178,15 +178,15 @@ public class TelaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem ajudaSobre;
     private javax.swing.JDesktopPane desktop;
-    private javax.swing.JMenuItem gerenciarReservas;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem fazerReserva;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuBar menu;
     private javax.swing.JMenu menuAjuda;
-    private javax.swing.JMenu menuCadastro;
+    private javax.swing.JMenu menuConta;
     private javax.swing.JMenu menuOpcoes;
+    private javax.swing.JMenu menuReserva;
     private javax.swing.JMenuItem opcoesSair;
     private javax.swing.JMenuItem usuarios;
-    private javax.swing.JMenuItem visualizarReservas;
+    private javax.swing.JMenuItem visualizarReserva;
     // End of variables declaration//GEN-END:variables
 }

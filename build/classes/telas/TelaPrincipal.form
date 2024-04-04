@@ -9,9 +9,9 @@
     </Component>
     <Menu class="javax.swing.JMenuBar" name="menu">
       <SubComponents>
-        <Menu class="javax.swing.JMenu" name="menuCadastro">
+        <Menu class="javax.swing.JMenu" name="menuConta">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Cadastro"/>
+            <Property name="text" type="java.lang.String" value="Conta"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="usuarios">
@@ -19,7 +19,7 @@
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
                   <KeyStroke key="Ctrl+N"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Usu&#xe1;rios"/>
+                <Property name="text" type="java.lang.String" value="Gerenciar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="usuariosActionPerformed"/>
@@ -27,22 +27,22 @@
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="jMenu1">
+        <Menu class="javax.swing.JMenu" name="menuReserva">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Reservas"/>
+            <Property name="text" type="java.lang.String" value="Reserva"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="visualizarReservas">
+            <MenuItem class="javax.swing.JMenuItem" name="visualizarReserva">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Visualizar"/>
               </Properties>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="gerenciarReservas">
+            <MenuItem class="javax.swing.JMenuItem" name="fazerReserva">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Gerenciar"/>
+                <Property name="text" type="java.lang.String" value="Reservar"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="gerenciarReservasActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fazerReservaActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
