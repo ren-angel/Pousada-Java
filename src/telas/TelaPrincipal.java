@@ -1,10 +1,62 @@
 package telas;
 import javax.swing.JOptionPane;
+import dal.ModuloConexao;
+import java.sql.*;
+import javax.swing.JInternalFrame;
 
 public class TelaPrincipal extends javax.swing.JFrame {
+    
+    Connection conexao = null;
+    PreparedStatement pst = null; // PreparedStatement é uma declaração SQL pré-compilada que permite queries parametrizadas, melhorando o desempenho e a segurança ao evitar ataques de intrusão de SQL
+    ResultSet rs = null; // ResultSet é um objeto usado para recuperar e manipular dados de um banco de dados após a execução de uma query. Ele fornece métodos para percorrer as linhas de dados, acessar valores de colunas individuais e executar operações como atualizações e exclusões nos dados
+    
 
     public TelaPrincipal() {
         initComponents();
+        conexao = ModuloConexao.connector(); // Estabelecimento de uma conexão com o banco de dados usando o método connector() da classe ModuloConexao
+    
+    }
+    
+    private void showQuartos(){
+        
+        //pega no banco nome, descricao, periodo e preco  da tabela quartos
+        String sql = "SELECT nome AS quarto, descricao AS descricao, periodo AS periodo, preco AS preco FROM tbl_quarto";
+        
+        try {
+            
+            pst = conexao.prepareStatement(sql);
+            rs = pst.executeQuery();
+            StringBuilder dados = new StringBuilder();//classe para concatenar string
+            
+            while(rs.next()){
+
+                //apresenta os dados
+                dados.append("Quarto :" + rs.getString("quarto") + "\n");
+                dados.append("Descrição :" + rs.getString("descricao") + "\n");
+                dados.append("Data checkIn :" + rs.getDate("periodo") + "\n");
+                dados.append("Data checkOut :" + rs.getDate("periodo") + "\n");
+                dados.append("Valor :" + rs.getFloat("preco") + "\n\n");
+            }
+            
+            //manda os dados para o (textArea)
+//            javax.swing.JTextArea reserva = TelaPagamento.getReserva();
+//            reserva.setText(dados.toString());
+
+        } catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, e);
+        }
+
+    }
+    
+    private void fecharFrame() {
+        
+        JInternalFrame[] frames = desktop.getAllFrames();
+        
+        for (JInternalFrame frame : frames) {
+            
+            frame.dispose();
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -138,6 +190,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariosActionPerformed
 
+        fecharFrame();
+        
         TelaContas conta = new TelaContas(); // Criando uma instância da classe TelaContas
         
         conta.setVisible(true); // Torna visível o frame TelaContas
@@ -147,6 +201,8 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void fazerReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fazerReservaActionPerformed
 
+        fecharFrame();
+        
         TelaReservar reservar = new TelaReservar(); // Criando uma instância da classe TelaReservar
         
         reservar.setVisible(true); // Torna visível o frame TelaReservar
@@ -155,13 +211,21 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_fazerReservaActionPerformed
 
     private void pagamentoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagamentoReservaActionPerformed
-               
+        
+        fecharFrame();
+        
+        showQuartos(); // chama a função showQuartos apos clickar no botão pagamentoReserva
+        
         TelaPagamento visualizar = new TelaPagamento(); // Criando uma instância da classe TelaVisualizarReserva
         
         visualizar.setVisible(true); // Torna visível o frame TelaVisualizarReserva
         
         desktop.add(visualizar); // Adiciona o frame TelaVisualizarReserva ao painel da área de trabalho
     }//GEN-LAST:event_pagamentoReservaActionPerformed
+
+    private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuReservaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
