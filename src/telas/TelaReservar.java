@@ -2,10 +2,23 @@ package telas;
 
 import java.sql.*;
 import dal.ModuloConexao;
+import java.awt.Color;
+import java.awt.Component;
 import validacao.Validacoes;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.SpringLayout;
+import javax.swing.SwingUtilities;
 
 public class TelaReservar extends javax.swing.JInternalFrame {
 
@@ -13,8 +26,10 @@ public class TelaReservar extends javax.swing.JInternalFrame {
     PreparedStatement pst = null; // PreparedStatement é uma declaração SQL pré-compilada que permite queries parametrizadas, melhorando o desempenho e a segurança ao evitar ataques de intrusão de SQL
     ResultSet rs = null; // ResultSet é um objeto usado para recuperar e manipular dados de um banco de dados após a execução de uma query. Ele fornece métodos para percorrer as linhas de dados, acessar valores de colunas individuais e executar operações como atualizações e exclusões nos dados
  
+//    PreparedStatement pst2 = null;
+//    ResultSet rs2 = null;
     
-    public TelaReservar() {
+    public TelaReservar() {            
         initComponents();
         
         conexao = ModuloConexao.connector(); // Estabelecimento de uma conexão com o banco de dados usando o método connector() da classe ModuloConexao
@@ -23,136 +38,199 @@ public class TelaReservar extends javax.swing.JInternalFrame {
         this.setBorder(null);
         BasicInternalFrameUI bui = (BasicInternalFrameUI) this.getUI();
         bui.setNorthPane(null);
+                        
+        mostrarQuartos();
     }
+
     
     private void mostrarQuartos() {
         
-        String pegarQuartos = "SELECT * FROM tbl_quartos WHERE id=?";
-        String pegarNumeroDeQuartos = "SELECT MAX(id) as maxID FROM tbl_quartos";
+        String pegarQuartos = "SELECT nome, descricao, preco, disponibilidade FROM tbl_quartos";
         
         try {
             
-            pst = conexao.prepareStatement(pegarQuartos); // Prepara a declaração SQL
+            pst = conexao.prepareStatement(pegarQuartos); // Prepara a declaração SQL para pegar os quartos
+                        
+            rs = pst.executeQuery();
 
-            rs = pst.executeQuery(); // Executa a SQL query
-            
+            int i = 0;
             while(rs.next()) {
                 
-//                javax.swing.JPanel paineis = criarPainel("Panel " + (i + 1));
-                javax.swing.JPanel paineis = criarPainel();
-                add(paineis);
+                String[] labelTexts = new String[4];
+                labelTexts[0] = rs.getString("nome");
+                labelTexts[1] = rs.getString("descricao");
+                labelTexts[2] = rs.getString("preco");
+                labelTexts[3] = rs.getString("disponibilidade");
+                
+                int y = 124;
+                y *= i;
+                y -= (4 * (i - 1));
+                i++;
+
+                javax.swing.JPanel paineis = criarPainel(labelTexts, y, i);
+                
+                jPanel2.add(paineis);
             }
 
         } catch (Exception e) {
             
             JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
         }
-        
-        int maxID = rs.getInt("maxID");
-        
-//        for (int i = 0; i < maxID; i++) {
-//            javax.swing.JPanel paineis = criarPainel("Panel " + (i + 1));
-//            add(paineis);
-//        }
     }
     
-    private javax.swing.JPanel criarPainel() {
+    private javax.swing.JPanel criarPainel(String[] labelTexts, int y, int id) {
+        
+        String atualizarInfoQuarto = "UPDATE tbl_quartos SET dataEntrada=?, dataSaida=?, idUsuario=?, disponibilidade=? WHERE id=?";
         
         javax.swing.JPanel painel = new javax.swing.JPanel();
-//        panel.setBorder(BorderFactory.createTitledBorder(nomePainel));
-        painel.setPreferredSize(new Dimension(592, 119)); // Adjust size as needed;
-//        return painel;
+
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+
+        painel.setBounds(0, y, 610, 120);
+
+        painel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        javax.swing.JLabel nomeQuarto = new javax.swing.JLabel();
+        nomeQuarto.setText(labelTexts[0]);
+        nomeQuarto.setAlignmentX(CENTER_ALIGNMENT);
+
+        Font font = nomeQuarto.getFont();
+        Font boldFont = new Font(font.getFontName(), Font.BOLD, 14);
+        nomeQuarto.setFont(boldFont);
+        painel.add(nomeQuarto);
+
+        javax.swing.JLabel descricao = new javax.swing.JLabel();
+        descricao.setText(labelTexts[1]);
+        descricao.setAlignmentX(CENTER_ALIGNMENT);
+        painel.add(descricao);
+
+        javax.swing.JLabel preco = new javax.swing.JLabel();
+        preco.setText("R$ " + labelTexts[2]);
+        preco.setAlignmentX(CENTER_ALIGNMENT);
+        painel.add(preco);
+
+        javax.swing.JLabel disponibilidade = new javax.swing.JLabel();
+        
+        System.out.println(labelTexts[3]);
+
+        if (Integer.parseInt(labelTexts[3]) == 0) {
+
+            disponibilidade.setText("Ocupado");
+        } else {
+
+            disponibilidade.setText("Disponível");
+        }
+
+        disponibilidade.setAlignmentX(CENTER_ALIGNMENT);
+        painel.add(disponibilidade);
+
+        painel.add(Box.createRigidArea(new Dimension(0, 10)));
+
+        javax.swing.JButton fazerReserva = new javax.swing.JButton();
+        fazerReserva.setText("Reservar");
+        fazerReserva.setAlignmentX(CENTER_ALIGNMENT);
+
+        if (disponibilidade.getText() == "Disponível") {
+            
+            fazerReserva.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    boolean loop = true;
+                    while (loop) {
+                        String dataEntrada = JOptionPane.showInputDialog(null, "Qual a data de entrada (no formato dd/mm/aaaa) da reserva?", "Tempo de reserva", JOptionPane.QUESTION_MESSAGE);
+                        String dataSaida = JOptionPane.showInputDialog(null, "Qual a data de saída (no formato dd/mm/aaaa) da reserva? Você pagará o preço do quarto por cada dia reservado", "Tempo de reserva", JOptionPane.QUESTION_MESSAGE);
+
+                        if (!Validacoes.validarData(dataEntrada) || !Validacoes.validarData(dataSaida)) {
+
+                            JOptionPane.showMessageDialog(null, "Insira uma data válida");
+                        } else {
+
+                            try {
+
+                                pst = conexao.prepareStatement(atualizarInfoQuarto);
+
+                                pst.setString(1, Validacoes.converterDataParaFormatoSQL(dataEntrada));
+                                pst.setString(2, Validacoes.converterDataParaFormatoSQL(dataSaida));
+                                pst.setString(3, String.valueOf(TelaLogin.getUserID()));
+                                pst.setString(4, "0");
+                                pst.setString(5, String.valueOf(id));
+
+                                int atualizado = pst.executeUpdate();
+
+                                if(atualizado > 0) {
+
+                                    JOptionPane.showMessageDialog(null, "Quarto reservado! Vá para a tela de pagamento para efetuar o pagamento");
+
+                                    loop = false;
+
+                                    JInternalFrame parentFrame = (JInternalFrame) SwingUtilities.getAncestorOfClass(JInternalFrame.class, (Component) e.getSource());
+    //                                JInternalFrame[] frames = desktop.getAllFrames();
+
+    //                                for (JInternalFrame frame : frames) {
+
+                                    parentFrame.dispose();
+    //                                }
+                                }
+                            } catch (Exception error) {
+
+                                JOptionPane.showMessageDialog(null, error); // Se ocorrer uma exceção, mostra uma mensagem de erro
+                            }
+                        }
+                    }
+                }
+            });
+        } else {
+            
+            fazerReserva.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    
+                    JOptionPane.showMessageDialog(null, "Este quarto já está reservado", "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
+            });
+        }
+        
+        painel.add(fazerReserva);
+
+        return painel;
     }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        nomeQuarto = new javax.swing.JLabel();
-        descricaoQuarto = new javax.swing.JLabel();
-        precoQuarto = new javax.swing.JLabel();
-        disponibilidadeQuarto = new javax.swing.JLabel();
-        reservarBtn = new javax.swing.JButton();
+        scrollPane = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
 
-        nomeQuarto.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nomeQuarto.setText("Nome Provisório");
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        descricaoQuarto.setText("Descrição Provisória");
+        scrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setPreferredSize(new java.awt.Dimension(603, 445));
 
-        precoQuarto.setText("Preço");
-
-        disponibilidadeQuarto.setText("Disponibilidade");
-
-        reservarBtn.setText("Reservar");
-        reservarBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                reservarBtnActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(nomeQuarto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(precoQuarto)
-                        .addGap(87, 87, 87))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(descricaoQuarto)
-                        .addGap(125, 125, 125)
-                        .addComponent(disponibilidadeQuarto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 122, Short.MAX_VALUE)
-                        .addComponent(reservarBtn)
-                        .addGap(63, 63, 63))))
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 597, Short.MAX_VALUE)
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(nomeQuarto)
-                    .addComponent(precoQuarto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(descricaoQuarto)
-                    .addComponent(disponibilidadeQuarto)
-                    .addComponent(reservarBtn))
-                .addGap(25, 25, 25))
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3601, Short.MAX_VALUE)
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 412, Short.MAX_VALUE))
-        );
+        scrollPane.setViewportView(jPanel2);
+
+        getContentPane().add(scrollPane, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 550));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void reservarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reservarBtnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_reservarBtnActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel descricaoQuarto;
-    private javax.swing.JLabel disponibilidadeQuarto;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel nomeQuarto;
-    private javax.swing.JLabel precoQuarto;
-    private javax.swing.JButton reservarBtn;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane scrollPane;
     // End of variables declaration//GEN-END:variables
 }

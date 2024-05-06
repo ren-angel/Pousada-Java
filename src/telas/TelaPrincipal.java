@@ -20,11 +20,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void showQuartos(){
         
         //pega no banco nome, descricao, periodo e preco  da tabela quartos
-        String sql = "SELECT nome AS quarto, descricao AS descricao, periodo AS periodo, preco AS preco FROM tbl_quarto";
+        String sql = "SELECT nome AS quarto, descricao AS descricao, periodo AS periodo, preco AS preco FROM tbl_quartos";
+        
+        String idUsuario = String.valueOf(TelaLogin.getUserID());
         
         try {
             
             pst = conexao.prepareStatement(sql);
+            pst.setString(1, idUsuario);
             rs = pst.executeQuery();
             StringBuilder dados = new StringBuilder();//classe para concatenar string
             
@@ -33,14 +36,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 //apresenta os dados
                 dados.append("Quarto :" + rs.getString("quarto") + "\n");
                 dados.append("Descrição :" + rs.getString("descricao") + "\n");
-                dados.append("Data checkIn :" + rs.getDate("periodo") + "\n");
-                dados.append("Data checkOut :" + rs.getDate("periodo") + "\n");
+                dados.append("Data de entrada :" + rs.getDate("dataEntrada") + "\n");
+                dados.append("Data de saída :" + rs.getDate("dataSaida") + "\n");
                 dados.append("Valor :" + rs.getFloat("preco") + "\n\n");
             }
             
             //manda os dados para o (textArea)
-//            javax.swing.JTextArea reserva = TelaPagamento.getReserva();
-//            reserva.setText(dados.toString());
+            javax.swing.JTextArea reserva = TelaPagamento.getReserva();
+            reserva.setText(dados.toString());
 
         } catch(Exception e){
             
@@ -86,7 +89,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 605, Short.MAX_VALUE)
+            .addGap(0, 603, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
