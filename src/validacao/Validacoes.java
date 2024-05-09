@@ -41,7 +41,7 @@ public class Validacoes {
             LocalDate diaEntrado = LocalDate.parse(dataSQL, estiloSQL); // Converte a data SQL do tipo String para LocalDate
             
             // Compara se a data inserida não é igual ou anterior a data atual
-            if (!diaEntrado.isEqual(diaAtual) && !diaEntrado.isBefore(diaAtual)) {
+            if (!diaEntrado.isBefore(diaAtual)) {
 
                 return false; // Se a data não for igual ou anterior ao dia de hoje, retorna false indicando dados inválidos
             }
@@ -71,7 +71,7 @@ public class Validacoes {
     }
 
     // Método para formatar a data do SQL para o mesmo formato usado pelo programa
-    public String converterDataSQLParaFormatado(String dataSQL) {
+    public static String converterDataSQLParaFormatado(String dataSQL) {
         
         // Cria objetos SimpleDateFormat para os formatos de data de entrada e saída
         DateTimeFormatter estiloFormatado = DateTimeFormatter.ofPattern("dd/MM/yyyy");

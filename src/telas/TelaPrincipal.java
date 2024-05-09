@@ -2,6 +2,7 @@ package telas;
 import javax.swing.JOptionPane;
 import dal.ModuloConexao;
 import java.sql.*;
+import java.time.LocalDate;
 import javax.swing.JInternalFrame;
 
 public class TelaPrincipal extends javax.swing.JFrame {
@@ -15,47 +16,59 @@ public class TelaPrincipal extends javax.swing.JFrame {
         initComponents();
         conexao = ModuloConexao.connector(); // Estabelecimento de uma conexão com o banco de dados usando o método connector() da classe ModuloConexao
     
+        atualizarBanco(); // Chama o método atualizarBanco quando entrar no programa
     }
     
-    private void showQuartos(){
+    // Método para atualizar o banco quando necessário, como quando um quarto passa da data de saída
+    private void atualizarBanco() {
         
-        //pega no banco nome, descricao, periodo e preco  da tabela quartos
-        String sql = "SELECT nome AS quarto, descricao AS descricao, periodo AS periodo, preco AS preco FROM tbl_quartos";
-        
-        String idUsuario = String.valueOf(TelaLogin.getUserID());
+        // Consulta as datas de saída para verificar quais datas já passaram
+        String sql = "SELECT dataSaida FROM tbl_quartos";
         
         try {
             
-            pst = conexao.prepareStatement(sql);
-            pst.setString(1, idUsuario);
-            rs = pst.executeQuery();
-            StringBuilder dados = new StringBuilder();//classe para concatenar string
+            pst = conexao.prepareStatement(sql); // Prepara a declaração SQL
             
-            while(rs.next()){
-
-                //apresenta os dados
-                dados.append("Quarto :" + rs.getString("quarto") + "\n");
-                dados.append("Descrição :" + rs.getString("descricao") + "\n");
-                dados.append("Data de entrada :" + rs.getDate("dataEntrada") + "\n");
-                dados.append("Data de saída :" + rs.getDate("dataSaida") + "\n");
-                dados.append("Valor :" + rs.getFloat("preco") + "\n\n");
+            rs = pst.executeQuery(); // Executa a SQL query
+            
+            // Enquanto houver um resultado...
+            while(rs.next()) {
+                
+                // Atualiza os dados do quarto de volta ao padrão
+                sql = "UPDATE tbl_quartos SET idUsuario=?, disponibilidade=?, pago=?";
+                
+                // Pega a data de saída obtida e a converte de String para data
+                String dataSaida = rs.getString("dataSaida");
+                LocalDate dataSaidaConvertida = LocalDate.parse(dataSaida);
+                
+                LocalDate diaAtual = LocalDate.now(); // Pega a data atual
+                
+                // Se a data de saída for anterior ao dia de hoje
+                if (dataSaidaConvertida.isBefore(diaAtual)) {
+                    
+                    pst = conexao.prepareStatement(sql); // Prepara a declaração SQL
+                    
+                    // Define os parâmetros para a declaração, sendo estes para retornar aos valores padrões
+                    pst.setString(1, null);
+                    pst.setString(2, "1");
+                    pst.setString(3, "0");
+                    
+                    pst.executeUpdate(); // Executa a declaração SQL
+                }
             }
+        } catch (Exception e) {
             
-            //manda os dados para o (textArea)
-            javax.swing.JTextArea reserva = TelaPagamento.getReserva();
-            reserva.setText(dados.toString());
-
-        } catch(Exception e){
-            
-            JOptionPane.showMessageDialog(null, e);
+            JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
         }
-
     }
     
+    
+    // Método para fechar o JInternalFrame atualmente aberto ao abrir outro
     private void fecharFrame() {
         
-        JInternalFrame[] frames = desktop.getAllFrames();
+        JInternalFrame[] frames = desktop.getAllFrames(); // Pega todos os frames abertos
         
+        // Fecha cada um dos frames abertos
         for (JInternalFrame frame : frames) {
             
             frame.dispose();
@@ -193,7 +206,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void usuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usuariosActionPerformed
 
-        fecharFrame();
+        fecharFrame(); // Chama o método fecharFrame ao abrir o frame
         
         TelaContas conta = new TelaContas(); // Criando uma instância da classe TelaContas
         
@@ -204,7 +217,7 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void fazerReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fazerReservaActionPerformed
 
-        fecharFrame();
+        fecharFrame(); // Chama o método fecharFrame ao abrir o frame
         
         TelaReservar reservar = new TelaReservar(); // Criando uma instância da classe TelaReservar
         
@@ -215,20 +228,14 @@ public class TelaPrincipal extends javax.swing.JFrame {
 
     private void pagamentoReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pagamentoReservaActionPerformed
         
-        fecharFrame();
-        
-        showQuartos(); // chama a função showQuartos apos clickar no botão pagamentoReserva
-        
+        fecharFrame(); // Chama o método fecharFrame ao abrir o frame
+                
         TelaPagamento visualizar = new TelaPagamento(); // Criando uma instância da classe TelaVisualizarReserva
         
         visualizar.setVisible(true); // Torna visível o frame TelaVisualizarReserva
         
         desktop.add(visualizar); // Adiciona o frame TelaVisualizarReserva ao painel da área de trabalho
     }//GEN-LAST:event_pagamentoReservaActionPerformed
-
-    private void menuReservaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuReservaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menuReservaActionPerformed
 
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">

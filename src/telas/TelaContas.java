@@ -34,34 +34,32 @@ public class TelaContas extends javax.swing.JInternalFrame {
                 
         String sql = "SELECT * FROM tbl_login WHERE id=?"; // Declaração SQL para buscar dados do banco de dados
 
-        // Verifica se o usuário entrou o ID e se o ID é um digito antes de tentar visualizar algo
+        try {
 
-            try {
+            pst = conexao.prepareStatement(sql); // Prepara a declaração SQL
 
-                pst = conexao.prepareStatement(sql); // Prepara a declaração SQL
+            pst.setString(1, ID); // Define o parâmetro para a declaração SQL baseado no ID selecionado
 
-                pst.setString(1, ID); // Define o parâmetro para a declaração SQL baseado no ID selecionado
+            rs = pst.executeQuery(); // Executa a SQL query
 
-                rs = pst.executeQuery(); // Executa a SQL query
+            // Se um resultado for encontrado, preenche os text fields com os dados recuperados
+            if(rs.next()) {
 
-                // Se um resultado for encontrado, preenche os text fields com os dados recuperados
-                if(rs.next()) {
-
-                    // Pega os dados do banco e os inseri nos text fields
-                    txtNome.setText(rs.getString(2));
-                    txtSenha.setText(rs.getString(3));
-                    txtEmail.setText(rs.getString(4));
-                    txtCPF.setText(rs.getString(5));
-                    txtDDD.setText(rs.getString(6));
-                    txtCelular.setText(rs.getString(7));
-                    txtEndereco.setText(rs.getString(8));
-                    txtEstado.setText(rs.getString(9));
-                    txtCidade.setText(rs.getString(10));
-                }
-            } catch(Exception e) {
-
-                JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
+                // Pega os dados do banco e os inseri nos text fields
+                txtNome.setText(rs.getString(2));
+                txtSenha.setText(rs.getString(3));
+                txtEmail.setText(rs.getString(4));
+                txtCPF.setText(rs.getString(5));
+                txtDDD.setText(rs.getString(6));
+                txtCelular.setText(rs.getString(7));
+                txtEndereco.setText(rs.getString(8));
+                txtEstado.setText(rs.getString(9));
+                txtCidade.setText(rs.getString(10));
             }
+        } catch(Exception e) {
+
+            JOptionPane.showMessageDialog(null, e); // Se ocorrer uma exceção, mostra uma mensagem de erro
+        }
     }
     
     // Método para editar os dados de um usuário cadastrado 
@@ -123,10 +121,10 @@ public class TelaContas extends javax.swing.JInternalFrame {
                 pst.setString(10, ID);
 
                 // Executa ambas as declarações SQL
-                int adicionado = pst.executeUpdate();
+                int alterado = pst.executeUpdate();
 
                 // Se a atualização dos dados do usuário em ambas as tabelas for bem-sucedida, mostra uma mensagem de sucesso e limpa os text fields
-                if(adicionado > 0) {
+                if(alterado > 0) {
 
                     JOptionPane.showMessageDialog(null, "Usuário atualizado");
                 }
@@ -203,6 +201,7 @@ public class TelaContas extends javax.swing.JInternalFrame {
         txtEstado = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
+        voltar = new javax.swing.JButton();
 
         jLabel1.setText("EDITAR CONTA");
 
@@ -211,12 +210,6 @@ public class TelaContas extends javax.swing.JInternalFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel4.setText("Email");
-
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
 
         btnEditar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         btnEditar.setText("Editar");
@@ -240,20 +233,8 @@ public class TelaContas extends javax.swing.JInternalFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("Celular");
 
-        txtCelular.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCelularActionPerformed(evt);
-            }
-        });
-
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("CPF");
-
-        txtCPF.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtCPFActionPerformed(evt);
-            }
-        });
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Endereço");
@@ -267,48 +248,60 @@ public class TelaContas extends javax.swing.JInternalFrame {
         jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel12.setText("Senha");
 
+        voltar.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        voltar.setText("Voltar");
+        voltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                voltarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(145, 145, 145)
-                .addComponent(btnEditar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnExcluir)
-                .addGap(141, 141, 141))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(255, 255, 255))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addGap(93, 93, 93)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtDDD, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar)
+                        .addGap(141, 425, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel3))
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel6)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
-                        .addComponent(txtCidade)
-                        .addComponent(txtEstado)
-                        .addComponent(txtEndereco)
-                        .addComponent(txtEmail)
-                        .addComponent(txtSenha)
-                        .addComponent(txtNome)))
-                .addGap(0, 128, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtDDD, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel6)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtCelular, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(voltar)
+                                    .addGap(66, 66, 66)
+                                    .addComponent(btnExcluir))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtCPF, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                                    .addComponent(txtCidade)
+                                    .addComponent(txtEstado)
+                                    .addComponent(txtEndereco)
+                                    .addComponent(txtEmail)
+                                    .addComponent(txtSenha)
+                                    .addComponent(txtNome))))
+                        .addGap(0, 128, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,7 +345,8 @@ public class TelaContas extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEditar)
-                    .addComponent(btnExcluir))
+                    .addComponent(btnExcluir)
+                    .addComponent(voltar))
                 .addGap(59, 59, 59))
         );
 
@@ -369,17 +363,9 @@ public class TelaContas extends javax.swing.JInternalFrame {
         apagar(); // Atribuí o método de apagar ao botão Excluir
     }//GEN-LAST:event_btnExcluirActionPerformed
 
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
-
-    private void txtCPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCPFActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCPFActionPerformed
-
-    private void txtCelularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCelularActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtCelularActionPerformed
+    private void voltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_voltarActionPerformed
+        this.dispose();  // Fecha a tela de contas
+    }//GEN-LAST:event_voltarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -404,5 +390,6 @@ public class TelaContas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txtEstado;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtSenha;
+    private javax.swing.JButton voltar;
     // End of variables declaration//GEN-END:variables
 }

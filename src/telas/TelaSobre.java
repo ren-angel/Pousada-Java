@@ -6,7 +6,7 @@ public class TelaSobre extends javax.swing.JFrame {
         initComponents();
         
         // Essa linha de código define o texto de um JLabel chamado labelDescricao como uma string de várias linhas usando formatação HTML. O texto é envolvido por tags <html> e <body> para permitir a renderização de HTML dentro do componente JLabel. Isto permite formatação como quebra de linhas com maior facilidade
-        labelDescricao.setText("<html><body>Nossa Pousada 5 estrelas trará a melhor experiência juntando conforto e luxo aos nossos clientes.<br>Para fazer uma reserva, clique em 'Reserva' no menu e então em 'Reservar', a tela com todos os nossos quartos aparecerá a você para serem reservados.<br> Para visualizar sua reserva e efetuar o pagamento, clique em 'Reserva' no meu e então em 'Pagamento', a tela de visualização e pagamento da reserva aparecerá a você.</body></html>");
+        labelDescricao.setText("<html><body>Nossa Pousada 5 estrelas trará a melhor experiência juntando conforto e luxo aos nossos clientes.<br>Para fazer uma reserva, clique em 'Reserva' no menu e então em 'Reservar', a tela com todos os nossos quartos aparecerá a você para serem reservados.<br> Para visualizar sua reserva e efetuar o pagamento, clique em 'Reserva' no menu e então em 'Pagamento', a tela de visualização e pagamento da reserva aparecerá a você.</body></html>");
     }
 
     @SuppressWarnings("unchecked")
