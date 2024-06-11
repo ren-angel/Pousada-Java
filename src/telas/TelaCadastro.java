@@ -21,7 +21,7 @@ public class TelaCadastro extends javax.swing.JFrame {
     private void Cadastrar() {
         
         // Declarações SQL para inserir as informações no banco de dados
-        String sql = "INSERT INTO tbl_login (nome,senha,email,cpf,ddd,celular,endereco,estado,cidade) VALUES (?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO tbl_login (nome,senha,email,cpf,ddd,celular,endereco,estado,cidade,admin) VALUES (?,?,?,?,?,?,?,?,?,?)";
         
         // Validações de cada entrada
         if(inputNome.getText().length() < 1 || inputNome.getText().length() > 100) {
@@ -73,6 +73,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 pst.setString(7, inputEndereco.getText());
                 pst.setString(8, inputEstado.getText());
                 pst.setString(9, inputCidade.getText());
+                pst.setString(10, "0");
 
                 // Executa ambas as declarações SQL
                 int  adicionado = pst.executeUpdate();
